@@ -55,7 +55,6 @@ public class Cell extends Button{
         setTextColor(ContextCompat.getColor(context, colorTemp));
     }
 
-
     public void setTopCell(Cell cell) {
         topNeighbour = cell;
     }
@@ -110,32 +109,49 @@ public class Cell extends Button{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    //v.getBackground().setAlpha(128);
+                    v.getBackground().setAlpha(128);
                     v.setSelected(true);
                     xPosI = (int)event.getX();
                     yPosI = (int)event.getY();
                     instance.addSelectedToArray(cell);
                     v.invalidate();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    //v.getBackground().setAlpha(255);
-                    //v.invalidate();
                     v.setSelected(true);
                     GridLayout tl = (GridLayout)v.getParent();
                     Cell cell2 = swipeCheckDirection(xPosI, yPosI, (int)event.getX(), (int)event.getY(), cell, instance);
                     if(cell2 != null){
                         instance.addSelectedToArray(cell2);
                         tl.performClick();
+                    } else {
+                        v.getBackground().setAlpha(255);
                     }
+                    v.invalidate();
                 }
                 return true;
             }
         });
     }
 
+    public void setCellIsVerified(boolean checked){
+        cellIsVerified = checked;
+    }
+
+    public boolean getCellIsVerified(){
+        return cellIsVerified;
+    }
+
+    public void setCellIsMatched(boolean checked){
+        isMatched = checked;
+    }
+
+    public boolean getCellIsMatched(){
+        return isMatched;
+    }
+
     private Cell swipeCheckDirection(int x, int y, int dx, int dy, Cell cell, final Game instance) {
         Cell cell2 = null;
         dir = "UNKNOWN";
-        boolean horizontal = Math.abs(y - dy) < getHeight()*2;
+        boolean horizontal = Math.abs(y - dy) < getHeight();
         // RIGHT
         if(dx > x && horizontal){
             cell2 = cell.getRightCell();
@@ -162,22 +178,4 @@ public class Cell extends Button{
         if(cell2!= null) Log.d("cell2", " " + cell2.getText());
         return cell2;
     }
-
-    public void setCellIsVerified(boolean checked){
-        cellIsVerified = checked;
-    }
-
-    public boolean getCellIsVerified(){
-        return cellIsVerified;
-    }
-
-    public void setCellIsMatched(boolean checked){
-        isMatched = checked;
-    }
-
-    public boolean getCellIsMatched(){
-        return isMatched;
-    }
-
-
 }

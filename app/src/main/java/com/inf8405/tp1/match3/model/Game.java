@@ -93,9 +93,8 @@ public final class Game extends AbstractBaseActivity {
             swapBtn(selectedCellArray.get(0), selectedCellArray.get(1));
             //printAllTable();
             int i = 0;
-            int j = 1;
             boolean foundMatch3 = false;
-            while(i < selectedCellArray.size() && j >= 0){
+            while(i < selectedCellArray.size()){
                 //Log.d("selectedArraySize", selectedCellArrays.size()+ "");
                 findSelectedManager(selectedCellArray.get(i),  selectedCellArray.get(i).getCurrentTextColor());
                 if(matchFoundArrays.size()>= 3){
@@ -113,9 +112,8 @@ public final class Game extends AbstractBaseActivity {
                 } else {
                     Log.d("non valid move", "non valid move");
                 }
-                clearMatchFoundArrays();
+                clearMatchFoundArrays(!foundMatch3);
                 ++i;
-                --j;
             }
             if(!foundMatch3){
                 //
@@ -140,13 +138,9 @@ public final class Game extends AbstractBaseActivity {
                 }
                 cell.setSelected(false);
                 cell.setCellIsVerified(false);
-                if(!cell.getCellIsMatched()){
-                    cell.getBackground().setAlpha(255);
-                    Log.d("255", cell.getText() + "");
-                }
             }
             clearColorVerifiedArray();
-            clearMatchFoundArrays();
+            clearMatchFoundArrays(true);
             clearColorVerifiedArray();
             clearSelectedArray();
         }
@@ -172,6 +166,10 @@ public final class Game extends AbstractBaseActivity {
         }
     }
 
+    public int getNbColumns() {
+        return nbColumns;
+    }
+
     private void addCellToRemoveArray(Cell cell){
         if(!cellToRemoveArray.contains(cell)){
             cellToRemoveArray.add(cell);
@@ -182,12 +180,6 @@ public final class Game extends AbstractBaseActivity {
         if(!matchFoundArrays.contains(cell)){
             matchFoundArrays.add(cell);
         }
-    }
-
-
-
-    public int getNbColumns() {
-        return nbColumns;
     }
 
     private void updateScore(){
@@ -253,21 +245,20 @@ public final class Game extends AbstractBaseActivity {
         if(!matchFoundArrays.contains(cell1)){
             addMatchFoundArrays(cell1);
         }
-        int cellColor = cellColorToCheck;
         // Check RIGHT
-        checkColor(cell1, cell1.getRightCell(), cellColor);
+        checkColor(cell1, cell1.getRightCell(), cellColorToCheck);
         // Check LEFT
-        checkColor(cell1, cell1.getLeftCell(), cellColor);
+        checkColor(cell1, cell1.getLeftCell(), cellColorToCheck);
         // Check TOP
-        checkColor(cell1, cell1.getTopCell(), cellColor);
+        checkColor(cell1, cell1.getTopCell(), cellColorToCheck);
         // Check BOTTOM
-        checkColor(cell1, cell1.getBottomCell(), cellColor);
+        checkColor(cell1, cell1.getBottomCell(), cellColorToCheck);
         cell1.setCellIsVerified(true);
     }
 
     private int checkColor(Cell cell1, Cell cell2, int cellColor){
         if(cell2 != null && !cell2.getCellIsVerified()){
-            //Log.d("checkColor", cell1.getText() + " && " +cell2.getText());
+            Log.d("checkColor", cell1.getText() + " && " +cell2.getText());
             //Log.d("checkColor2", cell1.getCurrentTextColor() + " && " + cell2.getCurrentTextColor() + " && " + cellColor);
             cell2.setCellIsVerified(true);
 
@@ -282,14 +273,14 @@ public final class Game extends AbstractBaseActivity {
                 //Log.d("matchFoundArray", " is " + matchFoundArrays.size() + " <=====================================");
                 return 1;
             }
+            Log.d("checkColor1", "failed with " + cell1.getText() + " " + cell2.getText());
         }
-        //Log.d("checkColor1", "failed with " + cell1.getText() + " " + cell2.getText());
         //Log.d("checkColor2", cell1.getCurrentTextColor() + " && " + cell2.getCurrentTextColor() + " && " + cellColor);
         colorVerifiedCellArray.add(cell2);
         return 0;
     }
 
-    private void clearSelectedArray(){
+    public void clearSelectedArray(){
         selectedCellArray = new ArrayList<>();
     }
 
@@ -297,7 +288,12 @@ public final class Game extends AbstractBaseActivity {
         colorVerifiedCellArray = new ArrayList<>();
     }
 
-    private void clearMatchFoundArrays(){
+    private void clearMatchFoundArrays(boolean clear){
+        if(clear){
+            for(Cell cell : matchFoundArrays){
+                cell.getBackground().setAlpha(255);
+            }
+        }
         matchFoundArrays = new ArrayList<>();
     }
 
@@ -355,6 +351,17 @@ public final class Game extends AbstractBaseActivity {
         cell.setBottomCell(cell2);
         cell2 = idx%nbColumns == 0 ? null : (Cell)gameTable.getChildAt(idx-1);
         cell.setLeftCell(cell2);
+        printSurroundingCell(cell);
+    }
+
+    private void printSurroundingCell(Cell cell){
+        String textL = cell.getLeftCell()==null?"N":cell.getLeftCell().getText().toString();
+        String textR = cell.getRightCell()==null?"N":cell.getRightCell().getText().toString();
+        String textT = cell.getTopCell()==null?"N":cell.getTopCell().getText().toString();
+        String textB = cell.getBottomCell()==null?"N":cell.getBottomCell().getText().toString();
+        Log.d("updateSurrounding", "\t\t"+textT);
+        Log.d("updateSurrounding", "\t"+ textL +"\t"+cell.getText()+ "\t"+textR);
+        Log.d("updateSurrounding", "\t\t"+textB);
     }
 
     private void printAllTable(){
@@ -416,7 +423,7 @@ public final class Game extends AbstractBaseActivity {
         Log.d("ARR", "test : " + arr.size() + " with " + test);
     }
 
-    protected void endGameAppDialog(String title, String msg) {
+    private void endGameAppDialog(String title, String msg) {
         new AlertDialog.Builder(currentActivity)
                 .setTitle(title)
                 .setMessage(msg)
