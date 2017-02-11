@@ -1,13 +1,17 @@
 package com.inf8405.tp1.match3.ui;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.GridLayout;
+import android.widget.Toast;
+
 import com.inf8405.tp1.match3.R;
 
 import java.util.ArrayList;
@@ -97,7 +101,7 @@ public class GridActivity extends AbstractBaseActivity {
                             case R.id.view_root:
                                 try{
                                     // TODO delete try catch
-                                    gameMatch3.scanCells(getApplicationContext());
+                                    gameMatch3.scanCells(null);
                                 }
                                 catch (Exception e){
                                     e.printStackTrace();
@@ -229,7 +233,7 @@ public class GridActivity extends AbstractBaseActivity {
 
         gameMatch3.setTableColumns(tableColumns);
         gameMatch3.setTableLayout(table);
-        gameMatch3.setIsStarted(true, this, level);
+        gameMatch3.setIsStarted(getBaseContext(), true, this, level);
 
         table.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -238,9 +242,9 @@ public class GridActivity extends AbstractBaseActivity {
                     case R.id.view_root:
                         try{
                             // TODO delete try catch when appropriate
-                            gameMatch3.scanCells(getApplicationContext());
+                            gameMatch3.scanCells(null);
                         }
-                        catch (Exception e){
+                        catch (NullPointerException e){
                             e.printStackTrace();
                         }
                         finally{
