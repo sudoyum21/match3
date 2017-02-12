@@ -1,36 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.inf8405.tp1.match3.ui.GridActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    android:background="@color/blue"
-    android:orientation="horizontal"
-    android:padding="10dp">
+    android:background="@color/black"
+    android:orientation="horizontal">
 
     <TextView
         android:id="@+id/text_score"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/score" />
+        android:text="@string/score"
+        android:textColor="@color/teal"/>
 
     <TextView
         android:id="@+id/text_score_player"
         android:layout_toRightOf="@id/text_score"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/teal"/>
 
     <TextView
         android:id="@+id/text_move"
         android:layout_below="@id/text_score"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/teal"/>
 
     <TextView
         android:id="@+id/text_move_player"
         android:layout_below="@id/text_score_player"
         android:layout_toRightOf="@id/text_move"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:alpha="1"
+        android:textColor="@color/teal"/>
+
+    <TextView
+        android:id="@+id/text_score_gain"
+        android:layout_toRightOf="@id/text_score_player"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@color/teal"/>
 
     <GridLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -45,5 +59,13 @@
         android:theme="@android:style/Widget.DeviceDefault.GridView">
     </GridLayout>
 
+    <Button
+        android:id="@+id/btn_music"
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="musicOnClick"
+        android:text="@string/play_music"
+        android:textColor="@color/teal"/>
 
 </RelativeLayout>

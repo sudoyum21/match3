@@ -1,7 +1,9 @@
 package com.inf8405.tp1.match3;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.view.Gravity;
@@ -34,8 +36,8 @@ public class MainActivity extends AbstractBaseActivity {
         rulesMsg.setText(R.string.rules);
         rulesMsg.setBackgroundColor(Color.WHITE);
 
-        layoutParams = new LinearLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
+        layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
         containerLayout.setOrientation(LinearLayout.VERTICAL);
         containerLayout.addView(rulesMsg, layoutParams);
         popUpWindow.setContentView(containerLayout);
@@ -74,11 +76,20 @@ public class MainActivity extends AbstractBaseActivity {
 
     public void exitButtonClicked(View v){
         popToast("Application Closed");
-        finish();
+        killApp();
     }
 
     private void closePopUpWindow(){
         isClicked = true;
         popUpWindow.dismiss();
+    }
+
+    private void killApp(){
+        // Termine l activity actuel
+        finish();
+        // Termine le programme
+        System.exit(0);
+        // Termine le process par PID
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
